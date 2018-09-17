@@ -11,6 +11,7 @@ const DELETE_PRODUCT = 'DELETE_PROUCT';
 
 //ACTION CREATORS
 const $LOAD_PRODUCTS = products => {
+
   return {
     type: LOAD_PRODUCTS,
     products,
@@ -54,13 +55,16 @@ const deleteProduct = product => {
 
 //REDUCER(S)
 const initialState = {
-  products: [{ id: 1, name: 'bob', rating: 2 }, { id: 2, name: 'alana', rating: 10 }],
+  products: [{ id: 1, name: 'bob', rating: 2 }, { id: 2, name: 'alana', rating: 10 }]
 }
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_PRODUCTS:
-      return action.products;
+      const copy = Object.create({ products: action.products })
+      copy.products = action.products;
+      return copy;
       break;
     case CREATE_PRODUCT:
       return 1;

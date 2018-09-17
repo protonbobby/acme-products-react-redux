@@ -15,7 +15,7 @@ class App extends Component {
       <div>
         <p>Hello World</p>
         <hr />
-
+        <Nav />
         <ProductList />
       </div>
     )
