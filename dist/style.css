@@ -1,0 +1,8 @@
+* {
+  color: purple;
+}
+
+.reactNav{
+  display: flex;
+  justify-content: space-around;
+}
