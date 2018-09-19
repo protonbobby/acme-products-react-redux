@@ -1,26 +1,29 @@
-import React from 'react'
-import { HashRouter as Router, Link, Route, Switch } from 'react-router-dom'
-import Product from './Product';
-import ProductList from './ProductList';
+import React from 'react';
+import { HashRouter as Router, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default () => {
-
+const Nav = ({ products }) => {
   return (
-    <Router>
-      <div>
-
-        <nav>
-          <Link className='reactNav' to="/api/products" replace>Products</Link>
-          <Link className='reactNav' to="/api/products/create" replace>Create Product</Link>
-        </nav>
-
+    <nav>
+      <Router>
         <div>
-          <Route path='/api/products/create' render={() => <div>Bye</div>}></Route>
 
-          <Route exact path='/api/products' render={() => <ProductList />}></Route>
+          <Link
+            to="/api/products"
+            className='reactNav'
+            replace>Products ({products.length})</Link>
+
+          <Link
+            to="/api/products/create"
+            className='reactNav'
+            replace>Create Product</Link>
+
         </div>
-
-      </div>
-    </Router>
+      </Router>
+    </nav>
   )
 }
+
+//________________________________
+const mapStateToProps = state => ({ products: state });
+export default connect(mapStateToProps, null)(Nav)

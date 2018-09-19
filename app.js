@@ -13,7 +13,7 @@ app.get('/', (req, res, next) => {
 
 app.get('/api/products', (req, res, next) => {
   Product.findAll()
-    .then(products => (res.send(products)))
+    .then(products => res.send(products))
     .catch(next)
 })
 
@@ -24,13 +24,13 @@ app.get('/api/products/:id', (req, res, next) => {
 })
 
 app.use(require('body-parser').json())
-app.post('./api/products', (req, res, next) => {
+app.post('/api/products', (req, res, next) => {
   Product.create(req.body)
-    .then((product) => res.send(product))
+    .then(product => res.send(product))
     .catch(next)
 })
 
-app.delete('./api/products/:id', (req, res, next) => {
+app.delete('/api/products/:id', (req, res, next) => {
   Product.destroy({ where: { id: req.params.id } })
     .then(() => res.sendStatus(204))
     .catch(next)

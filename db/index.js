@@ -12,7 +12,7 @@ const Product = conn.define('product', {
   rating: Sequelize.INTEGER,
 });
 
-const sync_and_seed = () => {
+const syncAndSeed = () => {
   conn.sync({ force: true })
     .then(() => {
       Promise.all([
@@ -37,7 +37,7 @@ const sync_and_seed = () => {
 }
 
 module.exports = {
-  sync_and_seed,
+  syncAndSeed,
   models: {
     Product,
   }

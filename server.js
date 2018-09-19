@@ -9,4 +9,4 @@ app.listen(PORT, () => {
   console.log(`Live at http://localhost/${PORT}`)
 })
 
-db.sync_and_seed();
+db.syncAndSeed();

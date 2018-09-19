@@ -4,79 +4,79 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 
-//ACTIONS
-const LOAD_PRODUCTS = 'LOAD_PRODUCTS';
-const CREATE_PRODUCT = 'CREATE_PRODUCT';
-const DELETE_PRODUCT = 'DELETE_PROUCT';
+const ACTIONS = {
+  LOAD_PRODUCTS: 'LOAD_PRODUCTS',
+  CREATE_PRODUCT: 'CREATE_PRODUCT',
+  DELETE_PRODUCT: 'DELETE_PROUCT',
+};
 
 //ACTION CREATORS
-const $LOAD_PRODUCTS = products => {
-
+const loadProductsCreator = products => {
   return {
-    type: LOAD_PRODUCTS,
+    type: ACTIONS.LOAD_PRODUCTS,
     products,
   }
 }
-const $CREATE_PRODUCT = product => {
+const createProductCreator = product => {
   return {
-    type: CREATE_PRODUCT,
+    type: ACTIONS.CREATE_PRODUCT,
     product,
   }
 }
-const $DELETE_PRODUCT = id => {
+const deleteProductCreator = product => {
   return {
-    type: DELETE_PRODUCT,
-    id,
+    type: ACTIONS.DELETE_PRODUCT,
+    product,
   }
 }
 
 //THUNKS
-const loadProducts = () => {
+export const loadProducts = () => {
   return (dispatch, getState) => {
     return axios.get('/api/products')
       .then(response => response.data)
-      .then(products => dispatch($LOAD_PRODUCTS(products)))
-      .catch(e => console.error(e))
+      .then(products => dispatch(loadProductsCreator(products)))
+      .catch(e => console.log(e))
   }
 }
-const createProduct = product => {
+export const createProduct = product => {
   return (dispatch, getState) => {
-    return axios.post('/api/users', product)
+    return axios.post('/api/products', product)
       .then(response => response.data)
-      .then(product => dispatch($CREATE_PRODUCT(product)))
+      .then(product => dispatch(createProductCreator(product)))
+      .catch(e => console.log(e))
   }
 }
-const deleteProduct = product => {
+export const deleteProduct = product => {
   return (dispatch, getState) => {
     axios.delete(`/api/products/${product.id}`)
-      .then(() => dispatch($DELETE_PRODUCT(product)))
+      .then(() => dispatch(deleteProductCreator(product)))
+      .catch(e => console.log(e))
   }
 }
 
 //REDUCER(S)
-const initialState = {
-  products: [{ id: 1, name: 'bob', rating: 2 }, { id: 2, name: 'alana', rating: 10 }]
-}
-
+const initialState = [
+  /* products: [{
+      name: 'Sonic',
+      rating: 10,
+  },{}]
+  */
+];
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_PRODUCTS:
-      const copy = Object.create({ products: action.products })
-      copy.products = action.products;
-      return copy;
-      break;
-    case CREATE_PRODUCT:
-      return 1;
-      break;
-    case DELETE_PRODUCT:
-      state = state.filter(product => product.id !== action.id)
-      break;
-    default: return state;
+    case ACTIONS.LOAD_PRODUCTS:
+      return action.products
+
+    case ACTIONS.CREATE_PRODUCT:
+      return [...state, action.products]
+
+    case ACTIONS.DELETE_PRODUCT:
+      return state.filter(product => product.id !== action.id)
   }
+  return state;
 }
 
 const store = createStore(reducer, applyMiddleware(logger, thunk));
-
 export default store;
-export { loadProducts, createProduct, deleteProduct }

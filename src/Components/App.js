@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
+import { HashRouter as Router, Route } from 'react-router-dom'
+import { connect } from 'react-redux';
 
-import store, { loadProducts } from '../store';
+import { loadProducts } from '../store';
 import Nav from './Nav';
 import Product from './Product';
 import ProductList from './ProductList'
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(loadProducts());
+    this.props.loadProducts
   }
 
   render() {
     return (
       <div>
-        <p>Hello World</p>
-        <hr />
         <Nav />
-        <ProductList />
+
+        <Router>
+          <div>
+            <Route path='/api/products/create' render={() => <Product />}></Route>
+            <Route path='/api/products' render={() => <ProductList />}></Route>
+          </div>
+        </Router>
       </div>
     )
   }
 }
 
-export default App;
+//________________________________
+const mapStateToProps = state => ({ products: state });
+const mapDispatchToProps = dispatch => ({ loadProducts: dispatch(loadProducts()) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
