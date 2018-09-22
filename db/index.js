@@ -8,8 +8,14 @@ const Product = conn.define('product', {
     type: Sequelize.STRING,
     unique: true,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    }
   },
-  rating: Sequelize.INTEGER,
+  rating: {
+    type: Sequelize.INTEGER,
+    defaultValue: 7,
+  }
 });
 
 const syncAndSeed = () => {

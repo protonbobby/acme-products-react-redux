@@ -2,8 +2,7 @@
 node_modules
 
 # build artifacts
-dist/bundle.js
-dist/bundle.js.map
+dist
 
 # misc
 .DS_Store

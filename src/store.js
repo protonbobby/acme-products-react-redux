@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
 
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
@@ -11,47 +11,22 @@ const ACTIONS = {
 };
 
 //ACTION CREATORS
-const loadProductsCreator = products => {
+const _loadProducts = products => {
   return {
     type: ACTIONS.LOAD_PRODUCTS,
     products,
   }
 }
-const createProductCreator = product => {
+const _createProduct = product => {
   return {
     type: ACTIONS.CREATE_PRODUCT,
     product,
   }
 }
-const deleteProductCreator = product => {
+const _deleteProduct = product => {
   return {
     type: ACTIONS.DELETE_PRODUCT,
     product,
-  }
-}
-
-//THUNKS
-export const loadProducts = () => {
-  return (dispatch, getState) => {
-    return axios.get('/api/products')
-      .then(response => response.data)
-      .then(products => dispatch(loadProductsCreator(products)))
-      .catch(e => console.log(e))
-  }
-}
-export const createProduct = product => {
-  return (dispatch, getState) => {
-    return axios.post('/api/products', product)
-      .then(response => response.data)
-      .then(product => dispatch(createProductCreator(product)))
-      .catch(e => console.log(e))
-  }
-}
-export const deleteProduct = product => {
-  return (dispatch, getState) => {
-    axios.delete(`/api/products/${product.id}`)
-      .then(() => dispatch(deleteProductCreator(product)))
-      .catch(e => console.log(e))
   }
 }
 
@@ -64,19 +39,49 @@ const initialState = [
   */
 ];
 
-const reducer = (state = initialState, action) => {
+const productsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTIONS.LOAD_PRODUCTS:
       return action.products
 
     case ACTIONS.CREATE_PRODUCT:
-      return [...state, action.products]
+      return [...state, action.product]
 
     case ACTIONS.DELETE_PRODUCT:
-      return state.filter(product => product.id !== action.id)
+      return state.filter(product => product.id !== action.product.id)
   }
   return state;
 }
 
-const store = createStore(reducer, applyMiddleware(logger, thunk));
-export default store;
+const reducer = combineReducers({
+  products: productsReducer,
+});
+
+//THUNKS
+export const loadProducts = () => {
+  return (dispatch) => {
+    return axios.get('/api/products')
+      .then(response => response.data)
+      .then(products => dispatch(_loadProducts(products)))
+      .catch(e => console.log(e));
+  }
+}
+export const createProduct = (product) => {
+  return (dispatch) => {
+    return axios.post('/api/products', product)
+      .then(response => response.data)
+      .then(product => dispatch(_createProduct(product)))
+      .catch(e => console.log(e));
+  }
+}
+export const deleteProduct = (product, history) => {
+  return (dispatch) => {
+    axios.delete(`/api/products/${product.id}`)
+      .then(response => response.data)
+      .then(() => dispatch(_deleteProduct(product)))
+      .then(() => history && history.push('/products'))
+      .catch(e => console.log(e));
+  }
+}
+
+export default createStore(reducer, applyMiddleware(logger, thunk));

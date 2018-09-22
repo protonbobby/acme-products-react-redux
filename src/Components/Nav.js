@@ -4,23 +4,12 @@ import { connect } from 'react-redux';
 
 const Nav = ({ products }) => {
   return (
-    <nav>
-      <Router>
-        <div>
-
-          <Link
-            to="/api/products"
-            className='reactNav'
-            replace>Products ({products.length})</Link>
-
-          <Link
-            to="/api/products/create"
-            className='reactNav'
-            replace>Create Product</Link>
-
-        </div>
-      </Router>
-    </nav>
+    <div>
+      <Link
+        to="/products"
+        className='reactNav'
+        replace>Products ({products.length})</Link>
+    </div>
   )
 }
 

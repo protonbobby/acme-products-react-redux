@@ -15,12 +15,11 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Nav />
-
         <Router>
           <div>
-            <Route path='/api/products/create' render={() => <Product />}></Route>
-            <Route path='/api/products' render={() => <ProductList />}></Route>
+            <Route component={Nav} />
+            <Route exact path='/products' component={ProductList}></Route>
+            {/* <Route path='/products/:id' render={(history, match) => <Product id={match.params.id * 1} history={history} />}></Route> */}
           </div>
         </Router>
       </div>
